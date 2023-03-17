@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="portalservice.portalservice.dao.UserDAOTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2023-03-17T10:27:22" hostname="1111s-MacBook-Air.local" time="0.089">
+  <properties/>
+  <testcase name="get()" classname="portalservice.portalservice.dao.UserDAOTest" time="0.089"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

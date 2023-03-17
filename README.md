@@ -2,37 +2,37 @@
 
 
 
-JDBC(Java Database Connectivity)는 자바에서 데이터베이스에 접속할 수 있도록 하는 자바 API다.
+JDBC(Java Database Connectivity) 는 **자바에서 데이터베이스에 접속할 수 있도록 하는 자바 API**다.
 
 
-Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD); 
+`Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD); `
 
 
-데이터베이스에 연결하려면 JDBC가 제공하는 DriverManager.getConnection(..) 를 사용하면 된다.
+데이터베이스에 연결하려면 JDBC가 제공하는 `DriverManager.getConnection(..)` 를 사용하면 된다.
 
 
-con.prepareStatement(sql) : 데이터베이스에 전달할 SQL과 파라미터로 전달할 데이터들을 준비한다.
+`con.prepareStatement(sql)` : 데이터베이스에 전달할 SQL과 파라미터로 전달할 데이터들을 준비한다.
 
 
-pstmt.setLong(1, id); : SQL의 첫번째 ? 에 값을 지정한다. 문자이므로 setString 을 사용한다.
+`pstmt.setLong(1, id);` : SQL의 첫번째 ? 에 값을 지정한다. 
 
 
-pstmt.executeUpdate() : Statement 를 통해 준비된 SQL을 커넥션을 통해 실제 데이터베이스에 전달한다.
+`pstmt.executeUpdate()` : Statement 를 통해 준비된 SQL을 커넥션을 통해 실제 데이터베이스에 전달한다.
 
 
-데이터를 조회할 때는 executeQuery() 를 사용한다.
+데이터를 조회할 때는 `executeQuery()` 를 사용한다.
 
 
-executeQuery() 는 결과를 ResultSet 에 담아서 반환한다.
+`executeQuery()` 는 결과를 `ResultSet` 에 담아서 반환한다.
 
 
-참고로 최초의 커서는 데이터를 가리키고 있지 않기 때문에 rs.next() 를 최초 한번은 호출해야 데이터를 조회할 수 있다.
+참고로 최초의 커서는 데이터를 가리키고 있지 않기 때문에 `rs.next()` 를 최초 한번은 호출해야 데이터를 조회할 수 있다.
 
 
 쿼리를 실행하고 나면 리소스를 정리해야 한다.
 
 
-여기서는 Connection , PreparedStatement 를 사용했다. 
+여기서는 `Connection , PreparedStatement` 를 사용했다. 
 
 
 리소스를 정리할 때는 항상 역순으로 해야한다.

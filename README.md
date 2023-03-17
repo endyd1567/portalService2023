@@ -1,7 +1,7 @@
 # 2023/03/17(금)
 
 
-JDBC 이해
+
 JDBC(Java Database Connectivity)는 자바에서 데이터베이스에 접속할 수 있도록 하는 자바 API다.
 
 Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD); 
@@ -10,9 +10,7 @@ Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
 
 con.prepareStatement(sql) : 데이터베이스에 전달할 SQL과 파라미터로 전달할 데이터들을 준비한다.
 
-pstmt.setString(1, member.getMemberId()) : SQL의 첫번째 ? 에 값을 지정한다. 문자이므로 setString 을 사용한다.
-
-pstmt.setInt(2, member.getMoney()) : SQL의 두번째 ? 에 값을 지정한다. Int 형 숫자이므로 setInt 를 지정한다.
+pstmt.setLong(1, id); : SQL의 첫번째 ? 에 값을 지정한다. 문자이므로 setString 을 사용한다.
 
 pstmt.executeUpdate() : Statement 를 통해 준비된 SQL을 커넥션을 통해 실제 데이터베이스에 전달한다.
 

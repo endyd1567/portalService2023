@@ -1,3 +1,66 @@
+# 2023/03/24(금)
+
+JDBC를 사용해서 회원( User ) 데이터를 데이터베이스에 관리하는 기능을 개발해보자.
+
+
+
+<img width="267" alt="스크린샷 2023-03-24 오후 4 55 46" src="https://user-images.githubusercontent.com/74756843/227486500-94294da8-508c-468f-bddc-03f1fafaabea.png">
+
+
+
+
+지금 테이블의 id를 DB가 제공해주는 자동증가 `AUTO_INCREMENT` 를 사용
+
+
+
+ `pstmt = con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);`
+
+그러면 이렇게 DB가 생성한 id 값이 필요하면 DB에서 새로 생성된 id 값을 읽어와야 합니다. 그 기능이 바로 `RETURN_GENERATED_KEYS`
+
+---
+```java
+public interface ConnectionMaker {
+    public Connection getConnection() throws ClassNotFoundException, SQLException;
+}
+```
+DIP 완성: ConnectionMaker 인 추상에만 의존하면 된다. 
+
+---
+```java
+public class UserDAO {
+
+    private final ConnectionMaker connectionMaker;
+
+    public UserDAO(ConnectionMaker connectionMaker) {
+        this.connectionMaker = connectionMaker;
+    }
+```
+UserDAO 클래스 생성자를 통해서 주입(연결)해준다.
+
+```java
+ConnectionMaker con = new JejuConnectionMaker();
+        UserDAO userDao = new UserDAO(con);
+```
+        
+클라이언트인 JejuConnectionMaker 입장에서 보면 의존관계를 마치 외부에서 주입해주는 것 같다고 해서
+
+**DI(Dependency Injection)** 
+**의존관계 주입 또는 의존성 주입** 이라 한다.
+
+---
+
+
+![스크린샷 2023-03-24 오후 7 27 38](https://user-images.githubusercontent.com/74756843/227497051-d5ef4a23-e72c-4449-86ec-f957b7357503.png)
+
+테스트 성공 
+
+
+
+---
+
+
+
+
 # 2023/03/17(금)
 
 

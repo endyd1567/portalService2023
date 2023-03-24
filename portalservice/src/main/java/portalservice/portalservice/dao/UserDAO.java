@@ -1,40 +1,76 @@
 package portalservice.portalservice.dao;
 
+import portalservice.portalservice.connection.ConnectionMaker;
 import portalservice.portalservice.domain.User;
 import java.sql.*;
-import static portalservice.portalservice.connection.DBConnectionUtil.getConnection;
 
 
 public class UserDAO {
-        public User findById(Long id) throws SQLException {
 
-            String sql = "select id, name, password from userinfo where ?";
+    private final ConnectionMaker connectionMaker;
+
+    public UserDAO(ConnectionMaker connectionMaker) {
+        this.connectionMaker = connectionMaker;
+    }
+
+    public User findById(Long id) throws SQLException, ClassNotFoundException {
+
+            String sql = "select id, name, password from userinfo where id = ?";
 
             Connection con = null;
             PreparedStatement pstmt = null;
             ResultSet rs = null;
 
             //Connection 맺고
-            con = getConnection();
+            con = connectionMaker.getConnection();
             //쿼리 만들고
             pstmt = con.prepareStatement(sql);
             //쿼리 실행하고
             pstmt.setLong(1, id);
-            ResultSet resultSet = pstmt.executeQuery();
-            resultSet.next();
+            rs = pstmt.executeQuery();
+            rs.next();
 
             //결과를 사용자 정보에 매핑하고
             User user = new User();
-            user.setId(resultSet.getLong("id"));
-            user.setName(resultSet.getString("name"));
-            user.setPassword(resultSet.getString("password"));
+            user.setId(rs.getLong("id"));
+            user.setName(rs.getString("name"));
+            user.setPassword(rs.getString("password"));
 
             //자원해지
-            resultSet.close();
+            rs.close();
             pstmt.close();
             con.close();
 
             //결과리턴
             return user;
         }
+
+    public User insert(User user) throws SQLException, ClassNotFoundException {
+
+        String sql = "insert into userinfo(name,password) values(?,?)";
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        //Connection 맺고
+        con = connectionMaker.getConnection();
+        //쿼리 만들고
+        pstmt = con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+        //쿼리 실행하고
+        pstmt.setString(1, user.getName());
+        pstmt.setString(2, user.getPassword());
+        pstmt.executeUpdate();
+
+        rs = pstmt.getGeneratedKeys();
+        rs.next();
+        user.setId(rs.getLong(1));
+
+        //자원해지
+        rs.close();
+        pstmt.close();
+        con.close();
+
+        return user;
     }
+}

@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="portalservice.portalservice.dao.UserDAOTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2023-03-17T10:27:22" hostname="1111s-MacBook-Air.local" time="0.089">
+<testsuite name="portalservice.portalservice.dao.UserDAOTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2023-03-24T10:26:46" hostname="1111s-MacBook-Air.local" time="0.098">
   <properties/>
-  <testcase name="get()" classname="portalservice.portalservice.dao.UserDAOTest" time="0.089"/>
-  <system-out><![CDATA[]]></system-out>
+  <testcase name="getForHalla()" classname="portalservice.portalservice.dao.UserDAOTest" time="0.08"/>
+  <testcase name="insert()" classname="portalservice.portalservice.dao.UserDAOTest" time="0.01"/>
+  <testcase name="get()" classname="portalservice.portalservice.dao.UserDAOTest" time="0.004"/>
+  <testcase name="insertForHalla()" classname="portalservice.portalservice.dao.UserDAOTest" time="0.004"/>
+  <system-out><![CDATA[19:26:47.006 [Test worker] INFO portalservice.portalservice.dao.UserDAOTest - 12
+19:26:47.017 [Test worker] INFO portalservice.portalservice.dao.UserDAOTest - 13
+]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

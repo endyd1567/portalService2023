@@ -1,3 +1,152 @@
+# 2023/03/31(금)
+
+
+
+
+
+```java
+public class DaoFactory {
+
+    private ConnectionMaker connectionMaker() {
+        return new JejuConnectionMaker();
+    }
+
+    public UserDAO getUserDAO() {
+        UserDAO userDAO = new UserDAO(connectionMaker());
+        return userDAO;
+    }
+}
+```
+
+지금까지 순수한 자바 코드만으로 DI를 적용했다.     
+
+
+<br/> 
+
+---
+
+### 스프링으로 전환하기   
+<br/>
+
+      
+```java
+@Configuration
+public class DaoFactory {
+```
+
+DaoFactory에 설정을 구성한다는 뜻의 `@Configuration` 을 붙여준다.
+
+스프링 컨테이너는 `@Configuration` 이 붙은 DaoFactory 를 설정(구성) 정보로 사용한다.
+
+<br/>
+
+<br/>
+
+```java
+@Bean
+    public ConnectionMaker connectionMaker() {
+        return new JejuConnectionMaker();
+    }
+```
+
+각 메서드에 `@Bean` 을 붙여준다. 이렇게 하면 **스프링 컨테이너에 스프링 빈으로 등록**한다.
+
+<br/>
+
+
+```java
+private static UserDAO userDAO;
+```
+
+<br/>
+
+테스트에서 동일한 userDAO 를 사용하기 위해 `static` 키워드 사용
+
+이 변수는 객체마다 생성되는 것이 아니라, 클래스가 처음으로 로드될 때 한 번 생성되며, 
+
+모든 객체들이 이 변수를 공유하여 사용합니다.
+
+<br/>
+
+```java
+new AnnotationConfigApplicationContext(DaoFactory.class)
+```
+
+`ApplicationContext` 를 스프링 컨테이너라 한다.  
+
+<br/>
+
+---
+
+### 스프링에서의 의존관계 주입(DI)
+
+![스크린샷 2023-03-31 오후 7 08 00](https://user-images.githubusercontent.com/74756843/229092106-5a407807-4826-42f5-a730-5261a9180fe5.png)
+
+
+스프링 컨테이너는 파라미터로 넘어온 설정 클래스 정보(DaoFactory)를 사용해서 스프링 빈을 등록한다.
+
+여기서 `@Bean` 이라 적힌 메서드를 모두 호출해서 반환된 객체를 스프링 컨테이너에 등록한다.
+
+이렇게 스프링 컨테이너에 등록된 객체를 스프링 빈이라 한다.
+
+스프링 컨테이너는 설정 정보를 참고해서 **의존관계를 주입(DI)** 한다.
+
+
+<br/>
+
+---
+
+### DataSource 
+
+DataSource 는 **커넥션을 획득하는 방법을 추상화** 하는 인터페이스이다.
+
+스프링이 제공하는 DataSource 가 적용된 DriverManager 인 `DriverManagerDataSource` 를 사용
+
+<br/>
+
+
+```java
+ @Bean
+    public DriverManagerDataSource dataSource() {
+        DriverManagerDataSource dataSource = new DriverManagerDataSource(URL_JEJU,USERNAME_JEJU,PASSWORD_JEJU);
+        return dataSource;
+    }
+```
+
+`dataSource` 빈을 등록
+
+
+<br/>
+
+```java
+
+public class UserDAO {
+
+    private final DataSource dataSource;
+
+    public UserDAO(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+
+            //Connection 
+            con = dataSource.getConnection();
+```
+
+UserDAO 는 추상화인 `dataSource` 에 의존
+
+
+<br/>
+
+![스크린샷 2023-03-31 오후 7 56 54](https://user-images.githubusercontent.com/74756843/229102259-200d116f-11f7-459d-a67d-906cb697fb0d.png)
+
+테스트 성공 
+
+<br/>
+
+
+---
+
 # 2023/03/24(금)
 
 JDBC를 사용해서 회원( User ) 데이터를 데이터베이스에 관리하는 기능을 개발해보자.
@@ -23,9 +172,14 @@ public interface ConnectionMaker {
     public Connection getConnection() throws ClassNotFoundException, SQLException;
 }
 ```
+
 DIP 완성: ConnectionMaker 인 추상에만 의존하면 된다. 
+<br/>
 
 ---
+
+<br/>
+
 ```java
 public class UserDAO {
 
@@ -36,6 +190,8 @@ public class UserDAO {
     }
 ```
 UserDAO 클래스 생성자를 통해서 주입(연결)해준다.
+<br/>
+<br/>
 
 ```java
 ConnectionMaker con = new JejuConnectionMaker();

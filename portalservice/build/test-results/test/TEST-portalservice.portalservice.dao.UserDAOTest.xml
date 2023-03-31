@@ -1,12 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="portalservice.portalservice.dao.UserDAOTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2023-03-24T10:26:46" hostname="1111s-MacBook-Air.local" time="0.098">
+<testsuite name="portalservice.portalservice.dao.UserDAOTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2023-03-31T10:55:58" hostname="1111s-MacBook-Air.local" time="0.111">
   <properties/>
-  <testcase name="getForHalla()" classname="portalservice.portalservice.dao.UserDAOTest" time="0.08"/>
-  <testcase name="insert()" classname="portalservice.portalservice.dao.UserDAOTest" time="0.01"/>
-  <testcase name="get()" classname="portalservice.portalservice.dao.UserDAOTest" time="0.004"/>
-  <testcase name="insertForHalla()" classname="portalservice.portalservice.dao.UserDAOTest" time="0.004"/>
-  <system-out><![CDATA[19:26:47.006 [Test worker] INFO portalservice.portalservice.dao.UserDAOTest - 12
-19:26:47.017 [Test worker] INFO portalservice.portalservice.dao.UserDAOTest - 13
+  <testcase name="insert()" classname="portalservice.portalservice.dao.UserDAOTest" time="0.105"/>
+  <testcase name="get()" classname="portalservice.portalservice.dao.UserDAOTest" time="0.005"/>
+  <system-out><![CDATA[19:55:58.603 [Test worker] DEBUG org.springframework.context.annotation.AnnotationConfigApplicationContext - Refreshing org.springframework.context.annotation.AnnotationConfigApplicationContext@6127a7e
+19:55:58.611 [Test worker] DEBUG org.springframework.beans.factory.support.DefaultListableBeanFactory - Creating shared instance of singleton bean 'org.springframework.context.annotation.internalConfigurationAnnotationProcessor'
+19:55:58.666 [Test worker] DEBUG org.springframework.beans.factory.support.DefaultListableBeanFactory - Creating shared instance of singleton bean 'org.springframework.context.event.internalEventListenerProcessor'
+19:55:58.667 [Test worker] DEBUG org.springframework.beans.factory.support.DefaultListableBeanFactory - Creating shared instance of singleton bean 'org.springframework.context.event.internalEventListenerFactory'
+19:55:58.668 [Test worker] DEBUG org.springframework.beans.factory.support.DefaultListableBeanFactory - Creating shared instance of singleton bean 'org.springframework.context.annotation.internalAutowiredAnnotationProcessor'
+19:55:58.669 [Test worker] DEBUG org.springframework.beans.factory.support.DefaultListableBeanFactory - Creating shared instance of singleton bean 'org.springframework.context.annotation.internalCommonAnnotationProcessor'
+19:55:58.673 [Test worker] DEBUG org.springframework.beans.factory.support.DefaultListableBeanFactory - Creating shared instance of singleton bean 'daoFactory'
+19:55:58.674 [Test worker] DEBUG org.springframework.beans.factory.support.DefaultListableBeanFactory - Creating shared instance of singleton bean 'userDao'
+19:55:58.680 [Test worker] DEBUG org.springframework.beans.factory.support.DefaultListableBeanFactory - Creating shared instance of singleton bean 'dataSource'
+19:55:58.695 [Test worker] DEBUG org.springframework.jdbc.datasource.DriverManagerDataSource - Creating new JDBC DriverManager Connection to [jdbc:h2:tcp://localhost/~/test]
+19:55:58.771 [Test worker] INFO portalservice.portalservice.dao.UserDAOTest - 24
+19:55:58.800 [Test worker] DEBUG org.springframework.jdbc.datasource.DriverManagerDataSource - Creating new JDBC DriverManager Connection to [jdbc:h2:tcp://localhost/~/test]
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

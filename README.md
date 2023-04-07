@@ -1,7 +1,158 @@
+# 2023/04/07(금)
+
+
+### 수정 메서드 
+```java
+public void update(User user) throws SQLException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = dataSource.getConnection();
+            //쿼리 만들고
+            preparedStatement = connection.prepareStatement
+                    ("update userinfo set name = ?, password = ? where id = ?");
+            preparedStatement.setString(1, user.getName());
+            preparedStatement.setString(2, user.getPassword());
+            preparedStatement.setLong(3, user.getId());
+            //쿼리 실행하고
+            preparedStatement.executeUpdate();
+        } finally {
+            try {
+                preparedStatement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+```
+
+수정 뿐 아니라 모든 메서드마다 try/catch/finally 구문이 반복된다는 문제점이 있다. 
+
+현재 반복되는 부분(변하지 않는 부분)은 전략 패턴을 적용하여 분리 & 재사용 하자 ! 
+
+<br/>
+
+## 전략 패턴 적용
+
+![image](https://user-images.githubusercontent.com/74756843/230598515-8e7e4867-7107-498a-9f45-7870f955008f.png)
+
+
+### StatementStrategy 인터페이스
+```java
+public interface StatementStrategy {
+    PreparedStatement makeStatement(Connection connection) throws SQLException;
+}
+```
+
+### UpdateStatementStrategy 클래스
+```java
+public class UpdateStatementStrategy implements StatementStrategy {
+    private User user;
+    public UpdateStatementStrategy(User user) {
+        this.user = user;
+    }
+
+    @Override
+    public PreparedStatement makeStatement(Connection connection) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement
+                ("update userinfo set name = ?, password = ? where id = ?");
+        preparedStatement.setString(1, user.getName());
+        preparedStatement.setString(2, user.getPassword());
+        preparedStatement.setLong(3, user.getId());
+        return preparedStatement;
+    }
+}
+```
+
+변하는 부분을, 아예 별도의 클래스로 만들어 추상화된 인터페이스를 통해 소통하도록 구성한다
+
+<br/>
+
+### 컨텍스트를 JdbcContext 클래스로 분리
+
+![image](https://user-images.githubusercontent.com/74756843/230601188-058f425c-15df-45af-9d29-092aa88a78c2.png)
+
+
+### jdbcContextForUpdate 메서드
+```java
+private void jdbcContextForUpdate(StatementStrategy statementStrategy) throws SQLException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = dataSource.getConnection();
+            preparedStatement = statementStrategy.makeStatement(connection);
+            preparedStatement.executeUpdate();
+        } finally {
+            try {
+                preparedStatement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+```
+
+### UserDao.update 메서드
+```java
+ public void update(User user) throws SQLException {
+        StatementStrategy statementStrategy = new UpdateStatementStrategy(user);
+        jdbcContext.jdbcContextForUpdate(statementStrategy);
+    }
+```
+
+클라이언트에서 구체적인 전략 클래스를 결정
+
+<br/>
+
+### 빈 의존관계 변경
+
+![image](https://user-images.githubusercontent.com/74756843/230602691-521168d6-2f17-4bbe-bfac-18fd1475ccbb.png)
+
+#### UserDao
+```java
+public class UserDao {
+
+    private final JdbcContext jdbcContext;
+
+    public UserDao(JdbcContext jdbcContext) {
+        this.jdbcContext = jdbcContext;
+    }
+```
+
+UserDao 는 이제 JdbcContext에 의존하고 있다.
+
+
+#### JdbcContext
+```java
+public class JdbcContext {
+    private final DataSource dataSource;
+
+    public JdbcContext(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+```
+ DataSource를 필요로 하는 것은 UserDao가 아니라 JdbcContext가 돼버린다.
+ 
+ JdbcContext가 DataSource 타입 빈을 DI 받을 수 있도록 코드를 수정
+ 
+
+
+
+---
+
+
+
+
 # 2023/03/31(금)
-
-
-
 
 
 ```java

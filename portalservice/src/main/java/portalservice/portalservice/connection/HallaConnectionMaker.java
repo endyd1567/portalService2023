@@ -8,7 +8,7 @@ import static portalservice.portalservice.connection.ConnectionConst.*;
 
 public class HallaConnectionMaker implements ConnectionMaker {
     @Override
-    public Connection getConnection() throws ClassNotFoundException, SQLException {
+    public Connection getConnection() throws  SQLException {
         Connection connection = DriverManager.getConnection(URL_HALLA, USERNAME_HALLA, PASSWORD_HALLA);
         return connection;
     }

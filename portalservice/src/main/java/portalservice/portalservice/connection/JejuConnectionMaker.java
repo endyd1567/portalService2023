@@ -9,7 +9,7 @@ import static portalservice.portalservice.connection.ConnectionConst.*;
 
 public class JejuConnectionMaker implements ConnectionMaker {
     @Override
-    public Connection getConnection() throws ClassNotFoundException, SQLException {
+    public Connection getConnection() throws SQLException {
             Connection connection = DriverManager.getConnection(URL_JEJU, USERNAME_JEJU, PASSWORD_JEJU);
             return connection;
     }

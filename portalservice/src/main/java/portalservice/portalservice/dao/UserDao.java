@@ -1,78 +1,45 @@
 package portalservice.portalservice.dao;
 
 import portalservice.portalservice.domain.User;
+import portalservice.portalservice.strategy.*;
 
 import javax.sql.DataSource;
 import java.sql.*;
+import java.util.Optional;
 
 
 public class UserDao {
+    private final JdbcContext jdbcContext;
 
-        private final DataSource dataSource;
-
-        public UserDao(DataSource dataSource) {
-            this.dataSource = dataSource;
-        }
-
-    public User findById(Long id) throws SQLException, ClassNotFoundException {
-
-            String sql = "select id, name, password from userinfo where id = ?";
-
-            Connection con = null;
-            PreparedStatement pstmt = null;
-            ResultSet rs = null;
-
-            //Connection 맺고
-            con = dataSource.getConnection();
-
-        //쿼리 만들고
-            pstmt = con.prepareStatement(sql);
-            //쿼리 실행하고
-            pstmt.setLong(1, id);
-            rs = pstmt.executeQuery();
-            rs.next();
-
-            //결과를 사용자 정보에 매핑하고
-            User user = new User();
-            user.setId(rs.getLong("id"));
-            user.setName(rs.getString("name"));
-            user.setPassword(rs.getString("password"));
-
-            //자원해지
-            rs.close();
-            pstmt.close();
-            con.close();
-
-            //결과리턴
-            return user;
-        }
-
-    public User insert(User user) throws SQLException, ClassNotFoundException {
-
-        String sql = "insert into userinfo(name,password) values(?,?)";
-
-        Connection con = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
-
-        //Connection 맺고
-        con = dataSource.getConnection();
-        //쿼리 만들고
-        pstmt = con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
-        //쿼리 실행하고
-        pstmt.setString(1, user.getName());
-        pstmt.setString(2, user.getPassword());
-        pstmt.executeUpdate();
-
-        rs = pstmt.getGeneratedKeys();
-        rs.next();
-        user.setId(rs.getLong(1));
-
-        //자원해지
-        rs.close();
-        pstmt.close();
-        con.close();
-
-        return user;
+    public UserDao(JdbcContext jdbcContext) {
+        this.jdbcContext = jdbcContext;
     }
+
+    public User findById(Long id) throws SQLException {
+        String sql = "select id, name, password from userinfo where id = ?";
+        Object[] params = new Object[]{id};
+        return jdbcContext.find(sql, params);
+    }
+
+    public void insert(User user) throws SQLException {
+        String sql = "insert into userinfo (name, password) values ( ?, ? )";
+        Object[] params = new Object[] {user.getName(), user.getPassword()};
+        jdbcContext.insert(user, sql, params);
+    }
+
+    public void update(User user) throws SQLException {
+        String sql = "update userinfo set name = ?, password = ? where id = ?";
+        Object[] params = new Object[]{user.getName(), user.getPassword(), user.getId()};
+        jdbcContext.update(sql, params);
+
+    }
+
+    public void delete(Long id) throws SQLException {
+        String sql = "delete from userinfo where id = ?";
+        Object[] params = new Object[]{id};
+        jdbcContext.update(sql, params);
+
+    }
+
 }
+

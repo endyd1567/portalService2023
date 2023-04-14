@@ -1,3 +1,64 @@
+# 2023/04/14(금)
+
+## 템플릿과 콜백
+![image](https://user-images.githubusercontent.com/74756843/232044373-e3df849e-5e47-45e3-8429-732c36cdda8f.png)
+
+`클라이언트` : 콜백 오브젝트를 만들고, 템플릿에 전달 및 호출 (1, 2)
+
+`템플릿` : 참조정보 생성 및 콜백의 오브젝트 메소드 호출 (3, 4, 5)
+
+`콜백` : 클라이언트 메소드에 있는 정보와 템플릿이 가진 참조 정보를 이용하여 작업 수행 후 템플릿에 결과 반환 (6, 7, 8)
+
+`템플릿` : 콜백이 돌려준 정보를 이용하여 나머지 작업 수행 후 경우에 따라 최종 결과를 다시 클라이언트에게 반환 (9, 10, 11)
+
+### 템플릿
+템플릿은 어떤 목적을 위해 미리 만들어둔 모양이 있는 틀을 가리킨다. 
+
+고정된 틀 안에 바꿀 수 있는 부분을 넣어서 사용하는 경우 템플릿이라고 부른다. 
+
+### 콜백
+콜백은 실행되는 것을 목적으로 다른 오브젝트의 메소드에 전달되는 오브젝트를 말한다.
+
+파라미터로 전달되지만 값을 참조하기 위한 것이 아니라 특정 로직을 담은 메소드를 실행시키기 위해 사용한다. 
+
+자바에선 메소드 자체를 파라미터로 전달할 방법은 없기 때문에 메소드가 담긴 오브젝트를 전달해야 한다.
+
+(자바 1.8부터 람다로 가능) 그래서 펑셔널 오브젝트(functional object)라고도 한다.
+
+### 템플릿과 콜백 패턴 적용
+```java
+public void update(User user) throws SQLException {
+        StatementStrategy statementStrategy = connection -> {
+            PreparedStatement preparedStatement = connection.prepareStatement
+                    ("update userinfo set name = ?, password = ? where id = ?");
+            preparedStatement.setString(1, user.getName());
+            preparedStatement.setString(2, user.getPassword());
+            preparedStatement.setLong(3, user.getId());
+            return preparedStatement;
+        };
+        jdbcContext.jdbcContextForUpdate(statementStrategy);
+    }
+```
+
+### update 코드 중복 제거 
+```java
+public void update(String sql, Object[] params) throws SQLException {
+        StatementStrategy statementStrategy = connection -> {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            for (int i = 0; i < params.length; i++) {
+                preparedStatement.setObject(i + 1, params[i]);
+            }
+            return preparedStatement;
+        };
+        jdbcContextForUpdate(statementStrategy);
+    }
+```
+
+
+
+
+
+
 # 2023/04/07(금)
 
 

@@ -11,22 +11,6 @@
 스프링 컨테이너는 다양한 형식의 설정 정보를 받아드릴 수 있게 유연하게 설계되어 있다.
 
 
-## 싱글톤 패턴
-
-클래스의 인스턴스가 딱 1개만 생성되는 것을 보장하는 디자인 패턴이다.
-
-그래서 객체 인스턴스를 2개 이상 생성하지 못하도록 막아야 한다.
-
-```java
-public class SingletonService {
-    
-    private static final SingletonService instance = new SingletonService();
-}
-```
-`static` : 정적 변수는 모든 인스턴스가 하나의 저장공간을 공유하기에 항상 같은 값을 가진다.
-
-`private` 생성자를 사용해서 외부에서 임의로 `new`키워드를 사용하지 못하도록 막아야 한다.
-
 ## @Component 
 
 ```java
@@ -40,7 +24,7 @@ public class DaoFactory {
     }
 ```
 
-지금까지 스프링 빈을 등록할 때는 자바 코드의 `@Bean`이나 XML의 `<bean>` 등을 통해서 설정 정보에 직접 등록할 스프링 빈을 나열했다.
+지금까지 스프링 빈을 등록할 때는 자바 코드의 `@Bean` 을 통해서 설정 정보에 직접 등록할 스프링 빈을 나열했다.
 
 ```java
 @Component
@@ -58,7 +42,26 @@ public  class UserDao {
 
 빈 등록자체를 빈 클래스 자체에다가 할 수 있다는 의미이다.
 
-생성자에 @Autowired 를 지정하면, 스프링 컨테이너가 자동으로 해당 스프링 빈을 찾아서 주입한다.
+생성자에 `@Autowired` 를 지정하면, 스프링 컨테이너가 자동으로 해당 스프링 빈을 찾아서 주입한다.
+
+
+## 싱글톤 패턴
+
+클래스의 인스턴스가 딱 1개만 생성되는 것을 보장하는 디자인 패턴이다.
+
+그래서 객체 인스턴스를 2개 이상 생성하지 못하도록 막아야 한다.
+
+```java
+public class SingletonService {
+    
+    private static final SingletonService instance = new SingletonService();
+}
+```
+`static` : 정적 변수는 모든 인스턴스가 하나의 저장공간을 공유하기에 항상 같은 값을 가진다.
+
+`private` 생성자를 사용해서 외부에서 임의로 `new`키워드를 사용하지 못하도록 막아야 한다.
+
+
 
 ---
 

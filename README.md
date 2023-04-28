@@ -1,3 +1,76 @@
+
+# 2023/04/28(금)
+
+## ApplicationContext
+![image](https://user-images.githubusercontent.com/74756843/235146470-1e08e7bc-9adf-4913-a225-014fe85260fb.png)
+
+`ApplicationContext` 는 스프링 프레임워크에서 제공하는 인터페이스 중 하나로, 애플리케이션의 구성 요소들을 관리하고, 
+
+빈(Bean)들의 생성과 관계 설정, 라이프 사이클 관리, 이벤트 발행 등을 수행하는 컨테이너(Container)입니다.
+
+스프링 컨테이너는 다양한 형식의 설정 정보를 받아드릴 수 있게 유연하게 설계되어 있다.
+
+
+## 싱글톤 패턴
+
+클래스의 인스턴스가 딱 1개만 생성되는 것을 보장하는 디자인 패턴이다.
+
+그래서 객체 인스턴스를 2개 이상 생성하지 못하도록 막아야 한다.
+
+```java
+public class SingletonService {
+    
+    private static final SingletonService instance = new SingletonService();
+}
+```
+`static` : 정적 변수는 모든 인스턴스가 하나의 저장공간을 공유하기에 항상 같은 값을 가진다.
+
+`private` 생성자를 사용해서 외부에서 임의로 `new`키워드를 사용하지 못하도록 막아야 한다.
+
+## @Component 
+
+```java
+@Configuration
+public class DaoFactory {
+
+    @Bean
+    public UserDao userDao() {
+        UserDao userDao = new UserDao(jdbcContext());
+        return userDao;
+    }
+```
+
+지금까지 스프링 빈을 등록할 때는 자바 코드의 `@Bean`이나 XML의 `<bean>` 등을 통해서 설정 정보에 직접 등록할 스프링 빈을 나열했다.
+
+```java
+@Component
+public  class UserDao {
+
+    private final JdbcContext jdbcContext;
+
+    @Autowired
+    public UserDao(JdbcContext jdbcContext) {
+        this.jdbcContext = jdbcContext;
+    }
+```
+
+`@Component` 어노테이션을 이용하면 `DaoFactory` 에 Bean 을 따로 등록하지 않아도 사용할 수 있다.
+
+빈 등록자체를 빈 클래스 자체에다가 할 수 있다는 의미이다.
+
+생성자에 @Autowired 를 지정하면, 스프링 컨테이너가 자동으로 해당 스프링 빈을 찾아서 주입한다.
+
+---
+
+
+# 2023/04/21(금)
+
+[중간고사](https://github.com/endyd1567/-java-framework-class-miexam)
+
+---
+
+
+
 # 2023/04/14(금)
 
 ## 템플릿과 콜백
